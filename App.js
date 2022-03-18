@@ -1,36 +1,58 @@
-import React from 'react'
-import { StyleSheet, View, SafeAreaView, Text, SectionList } from 'react-native'
+import React, { useState } from 'react'
+import { StyleSheet, View, SafeAreaView, ImageBackground, Text, TextInput, Image } from 'react-native'
+import CustomButton from './components/CustomButton'
 
 const App = () => {
-  const DATA = [
-    { title: 'Learn React Native', data: ['Item 1', 'Item 2', 'Item 3']},
-    { title: 'Learn PostgreSQL', data: ['Item 1', 'Item 2', 'Item 3'] },
-    { title: 'Learn Swift', data: ['Item 1'] },
-    { title: 'Learn Flutter', data: ['Item 1', 'Item 2'] },
-  ];
-
+  const [name, setName] = useState('')
+  const [submitted, setSubmitted] = useState(false)
+  const onPressHandler = () => setSubmitted(!submitted) 
+  
   return (
-      <SafeAreaView style={styles.container}>
-        <SectionList
-          keyExtractor={index => index.toString()}
-          sections={DATA}
-          renderItem={({ item }) => (
-            <Text style={styles.text}>{item}</Text>
-          )}
-          renderSectionHeader={({ section }) => (
-            <View style={styles.item}>
-              <Text style={styles.text}>{section.title}</Text>
-            </View>
-          )}
+    <SafeAreaView style={{ flex: 1 }}>
+      <ImageBackground
+        source={{ uri: 'https://i.pinimg.com/originals/45/ce/29/45ce2986d79fc7cd05014bd522a88834.jpg' }}
+        style={styles.container}>
+        <Text style={styles.text}>Enter OTP:</Text>
+        <TextInput
+          style={styles.inputBox}
+          placeholder='Enter your four digit OTP'
+          onChangeText={(value) => setName(value)}
+          keyboardType='numeric'
+          maxLength={4}
+          secureTextEntry={true}
         />
-      </SafeAreaView>
+        <CustomButton
+          pressFunction={onPressHandler}
+          title={submitted ? 'Clear' : 'Submit'}
+        />
+        {submitted ?
+          <View style={styles.container}>
+            <Text style={styles.text}>
+              You entered - {name}
+            </Text>
+            <Image
+              style={styles.image}
+              source={require('./assets/done.png')}
+              resizeMode='cover'
+            />
+          </View>
+          :
+          <Image
+            style={styles.image}
+            source={require('./assets/error.png')}
+            resizeMode='stretch'
+          />
+        }
+      </ImageBackground>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: 'lightblue'},
-  item: { margin: 10, justifyContent: 'center', alignItems: 'center', backgroundColor: 'lightyellow' },
-  text: { fontSize: 40, color: 'black', padding: 10 },
+  container: { flex: 1, alignItems: 'center' },
+  inputBox: { width: 300, borderWidth: 1, borderColor: '#555',  borderRadius: 5, textAlign: 'center', fontSize: 20, padding: 10, marginBottom: 10 },
+  text: { fontSize: 30, color: 'black', padding: 10 },
+  image: { width: 100, height: 100, margin: 10 }
 })
 
 export default App
