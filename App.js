@@ -1,58 +1,43 @@
-import React, { useState } from 'react'
-import { StyleSheet, View, SafeAreaView, ImageBackground, Text, TextInput, Image } from 'react-native'
-import CustomButton from './components/CustomButton'
+import 'react-native-gesture-handler';
+import React from 'react';
+import { StyleSheet, SafeAreaView } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import FirstScreen from './components/FirstScreen';
+import SecondScreen from './components/SecondScreen';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+const Drawer = createDrawerNavigator();
 
-const App = () => {
-  const [name, setName] = useState('')
-  const [submitted, setSubmitted] = useState(false)
-  const onPressHandler = () => setSubmitted(!submitted) 
-  
+function App() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ImageBackground
-        source={{ uri: 'https://i.pinimg.com/originals/45/ce/29/45ce2986d79fc7cd05014bd522a88834.jpg' }}
-        style={styles.container}>
-        <Text style={styles.text}>Enter OTP:</Text>
-        <TextInput
-          style={styles.inputBox}
-          placeholder='Enter your four digit OTP'
-          onChangeText={(value) => setName(value)}
-          keyboardType='numeric'
-          maxLength={4}
-          secureTextEntry={true}
-        />
-        <CustomButton
-          pressFunction={onPressHandler}
-          title={submitted ? 'Clear' : 'Submit'}
-        />
-        {submitted ?
-          <View style={styles.container}>
-            <Text style={styles.text}>
-              You entered - {name}
-            </Text>
-            <Image
-              style={styles.image}
-              source={require('./assets/done.png')}
-              resizeMode='cover'
-            />
-          </View>
-          :
-          <Image
-            style={styles.image}
-            source={require('./assets/error.png')}
-            resizeMode='stretch'
+      <NavigationContainer>
+        <Drawer.Navigator
+          initialRouteName="First"
+          drawerPosition='left'
+          drawerType="front"
+          edgeWidth={100}
+          hideStatusBar={false}
+          overlayColor='#00000090'
+          drawerStyle={{
+            backgroundColor: '#e6e6e6',
+            width: 250
+          }}
+        >
+          <Drawer.Screen
+            name="First"
+            component={FirstScreen}
+            initialParams={{ name: 'This is from Drawer', id: 95 }}
           />
-        }
-      </ImageBackground>
+          <Drawer.Screen
+            name="Second"
+            component={SecondScreen}
+          />
+        </Drawer.Navigator>
+      </NavigationContainer>
     </SafeAreaView>
   )
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: 'center' },
-  inputBox: { width: 300, borderWidth: 1, borderColor: '#555',  borderRadius: 5, textAlign: 'center', fontSize: 20, padding: 10, marginBottom: 10 },
-  text: { fontSize: 30, color: 'black', padding: 10 },
-  image: { width: 100, height: 100, margin: 10 }
-})
+const styles = StyleSheet.create({})
 
-export default App
+export default App;
