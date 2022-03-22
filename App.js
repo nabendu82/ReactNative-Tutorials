@@ -1,43 +1,34 @@
-import 'react-native-gesture-handler';
 import React from 'react';
-import { StyleSheet, SafeAreaView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import FirstScreen from './components/FirstScreen';
-import SecondScreen from './components/SecondScreen';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-const Drawer = createDrawerNavigator();
+import { createStackNavigator } from '@react-navigation/stack';
+import LoginComponent from './components/LoginComponent';
+import HomeComponent from './components/HomeComponent';
+import { Provider } from 'react-redux';
+import { Store } from './redux/store';
+const Stack = createStackNavigator();
 
 function App() {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <Provider store={Store}>
       <NavigationContainer>
-        <Drawer.Navigator
-          initialRouteName="First"
-          drawerPosition='left'
-          drawerType="front"
-          edgeWidth={100}
-          hideStatusBar={false}
-          overlayColor='#00000090'
-          drawerStyle={{
-            backgroundColor: '#e6e6e6',
-            width: 250
-          }}
+        <Stack.Navigator
+          initialRouteName="Login"
+          screenOptions={{ headerTitleAlign: 'center', headerStyle: { backgroundColor: '#0080ff' },            headerTintColor: '#ffffff',
+          headerTitleStyle: { fontSize: 25, fontWeight: 'bold' }}}
         >
-          <Drawer.Screen
-            name="First"
-            component={FirstScreen}
-            initialParams={{ name: 'This is from Drawer', id: 95 }}
+          <Stack.Screen
+            name="Login"
+            component={LoginComponent}
+            options={{ headerShown: false}}
           />
-          <Drawer.Screen
-            name="Second"
-            component={SecondScreen}
+          <Stack.Screen
+            name="Home"
+            component={HomeComponent}
           />
-        </Drawer.Navigator>
+        </Stack.Navigator>
       </NavigationContainer>
-    </SafeAreaView>
+    </Provider>
   )
 }
-
-const styles = StyleSheet.create({})
 
 export default App;
